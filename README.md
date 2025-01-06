@@ -51,8 +51,6 @@ If you prefer manual setup, please ensure the following dependencies are install
    pip3 install pynput
    ```
 
----
-
 ### **Installation**
 
 1. Create a ROS workspace and navigate to the `src` directory:
@@ -77,8 +75,6 @@ If you prefer manual setup, please ensure the following dependencies are install
      cd ../
      colcon build
      ```
-
----
 
 ### **Pre-Execution Steps**
 
