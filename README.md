@@ -3,13 +3,13 @@
 
 ## **Overview**
 
-The **hex_toolkit_general_chassis** package provides a suite of tools for robot chassis control, including keyboard-based teleoperation.
+The **hex_toolkit_general_chassis** package provides a suite of tools for robot chassis control, including keyboard and gamepad-based teleoperation.
 
 ### **Maintainer**
 
 **Dong Zhaorui**: [847235539@qq.com](mailto:847235539@qq.com)
 
-#### **Supported Platforms**
+### **Verified Platforms**
 
 - [x] **x64**
 - [ ] **Jetson Orin Nano**
@@ -18,7 +18,7 @@ The **hex_toolkit_general_chassis** package provides a suite of tools for robot 
 - [ ] **Horizon RDK X5**
 - [ ] **Rockchip RK3588**
 
-#### **Verified ROS Versions**
+### **Verified ROS Versions**
 
 - [x] **Noetic**
 - [x] **Humble**
@@ -30,12 +30,12 @@ The **hex_toolkit_general_chassis** package provides a suite of tools for robot 
 
 ### **Dependencies**
 
-For **Hex Chassis** users, we strongly recommend using this package within our **Hex Docker Images** to ensure compatibility and optimal performance.
+For **Hex Chassis** users, we highly recommend using this package within our **Hex Docker Images** to ensure compatibility and streamlined setup.
 
-For other users, you can install the dependencies manually
+If you prefer manual setup, please ensure the following dependencies are installed:
 
 1. **ROS**  
-   Follow the official ROS/ROS2 Installation Guide.
+   Refer to the official [ROS](http://wiki.ros.org/ROS/Installation) and [ROS2](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html) Installation Guide.
 
 2. **pygame**  
    Install via pip:
@@ -50,6 +50,8 @@ For other users, you can install the dependencies manually
    ```shell
    pip3 install pynput
    ```
+
+---
 
 ### **Installation**
 
@@ -76,9 +78,11 @@ For other users, you can install the dependencies manually
      colcon build
      ```
 
+---
+
 ### **Pre-Execution Steps**
 
-1. Source the appropriate setup file:
+1. Source the appropriate setup file for your ROS version:
 
    - For **ROS 1**:
 
@@ -96,11 +100,9 @@ For other users, you can install the dependencies manually
 
 ## **Demos**
 
-### **Available Demos**
-
-- **Cart Gen**
-- **Joy Ctrl**
-- **Key Ctrl**
+- **Cart Gen**: Generate circular trajectories for testing.  
+- **Joy Ctrl**: Control the chassis with a gamepad.  
+- **Key Ctrl**: Control the chassis with a keyboard.
 
 ---
 
@@ -108,7 +110,7 @@ For other users, you can install the dependencies manually
 
 #### **Introduction**
 
-The **Cart Gen** module generates a circular trajectory for testing.
+The **Cart Gen** module generates a circular trajectory for chassis testing.
 
 #### **Usage**
 
@@ -130,21 +132,17 @@ The **Cart Gen** module generates a circular trajectory for testing.
 | -------------- | --------------------------- | ----------------------------------- |
 | `/target_pose` | `geometry_msgs/PoseStamped` | Publishes target poses for testing. |
 
-#### **Subscribed Topics**
-
-None
-
 #### **Parameters**
 
-| Parameter Name      | Data Type        | Description                                       |
-| ------------------- | ---------------- | ------------------------------------------------- |
-| `rate_ros`          | `double`         | Execution rate of the ROS node (Hz).              |
-| `model_base`        | `string`         | Frame ID of the chassis base.                     |
-| `model_odom`        | `string`         | Frame ID of the odometry.                         |
-| `cart_center`       | `vector<double>` | Coordinates of the trajectory's center (m).       |
-| `cart_radius`       | `double`         | Radius of the trajectory (m).                     |
-| `cart_period`       | `double`         | Time for a full circle (s).                       |
-| `cart_inverse_flag` | `bool`           | Determines if the trajectory is counterclockwise. |
+| Parameter Name      | Data Type        | Description                                      |
+| ------------------- | ---------------- | ------------------------------------------------ |
+| `rate_ros`          | `double`         | Execution rate of the ROS node (Hz).             |
+| `model_base`        | `string`         | Frame ID of the chassis base.                    |
+| `model_odom`        | `string`         | Frame ID of the odometry.                        |
+| `cart_center`       | `vector<double>` | Coordinates of the trajectory's center (m).      |
+| `cart_radius`       | `double`         | Radius of the trajectory (m).                    |
+| `cart_period`       | `double`         | Time to complete one full circle (s).            |
+| `cart_inverse_flag` | `bool`           | Specifies if the trajectory is counterclockwise. |
 
 ---
 
@@ -152,7 +150,7 @@ None
 
 #### **Introduction**
 
-The **Joy Ctrl** module publishes `twist` commands based on gamepad input.
+The **Joy Ctrl** module allows users to control the chassis using a gamepad.
 
 #### **Usage**
 
@@ -170,14 +168,10 @@ The **Joy Ctrl** module publishes `twist` commands based on gamepad input.
 
 #### **Published Topics**
 
-| Topic Name     | Message Type                 | Description                                     |
-| -------------- | ---------------------------- | ----------------------------------------------- |
-| `/unsafe_ctrl` | `geometry_msgs/Twist`        | Publishes `twist` commands without a timestamp. |
-| `/vel_ctrl`    | `geometry_msgs/TwistStamped` | Publishes `twist` commands with a timestamp.    |
-
-#### **Subscribed Topics**
-
-None
+| Topic Name     | Message Type                 | Description                                    |
+| -------------- | ---------------------------- | ---------------------------------------------- |
+| `/unsafe_ctrl` | `geometry_msgs/Twist`        | Publishes `twist` commands without timestamps. |
+| `/vel_ctrl`    | `geometry_msgs/TwistStamped` | Publishes `twist` commands with timestamps.    |
 
 #### **Parameters**
 
@@ -188,9 +182,9 @@ None
 | `ratio_vy`     | `double`  | Ratio of y-axis linear velocity (m/s).    |
 | `ratio_yaw`    | `double`  | Ratio of z-axis angular velocity (rad/s). |
 | `joy_deadzone` | `double`  | Deadzone for joystick axis input.         |
-| `joy_vx`       | `string`  | Axis for x-axis linear velocity.          |
-| `joy_vy`       | `string`  | Axis for y-axis linear velocity.          |
-| `joy_yaw`      | `string`  | Axis for z-axis angular velocity.         |
+| `joy_vx`       | `string`  | Axis name for x-axis linear velocity.     |
+| `joy_vy`       | `string`  | Axis name for y-axis linear velocity.     |
+| `joy_yaw`      | `string`  | Axis name for z-axis angular velocity.    |
 
 ---
 
@@ -198,7 +192,7 @@ None
 
 #### **Introduction**
 
-The **Key Ctrl** module publishes `twist` commands based on keyboard input.
+The **Key Ctrl** module enables users to control the chassis using a keyboard.
 
 #### **Usage**
 
@@ -216,14 +210,10 @@ The **Key Ctrl** module publishes `twist` commands based on keyboard input.
 
 #### **Published Topics**
 
-| Topic Name     | Message Type                 | Description                                     |
-| -------------- | ---------------------------- | ----------------------------------------------- |
-| `/unsafe_ctrl` | `geometry_msgs/Twist`        | Publishes `twist` commands without a timestamp. |
-| `/vel_ctrl`    | `geometry_msgs/TwistStamped` | Publishes `twist` commands with a timestamp.    |
-
-#### **Subscribed Topics**
-
-None
+| Topic Name     | Message Type                 | Description                                    |
+| -------------- | ---------------------------- | ---------------------------------------------- |
+| `/unsafe_ctrl` | `geometry_msgs/Twist`        | Publishes `twist` commands without timestamps. |
+| `/vel_ctrl`    | `geometry_msgs/TwistStamped` | Publishes `twist` commands with timestamps.    |
 
 #### **Parameters**
 
