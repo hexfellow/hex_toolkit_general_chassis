@@ -1,0 +1,14 @@
+# rate
+rate_ros: 100.0
+
+# model
+model_base: "base_link"
+model_odom: "odom"
+
+# cart
+cart_center:
+  - 0.0
+  - 0.0
+cart_radius: 2.0
+cart_period: 15.0
+cart_inverse_flag: false
