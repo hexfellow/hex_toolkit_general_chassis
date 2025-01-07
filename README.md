@@ -100,9 +100,9 @@ If you choose to set up manually, please install the following dependencies:
 
 ---
 
-## **Demos**
+## **Nodes**
 
-The package provides the following demos:
+The package provides the following nodes:
 
 - **Cart Gen**: Generates circular trajectories for testing.  
 - **Joy Ctrl**: Enables chassis control using a gamepad.  
@@ -115,20 +115,6 @@ The package provides the following demos:
 #### **Introduction**
 
 The **Cart Gen** module generates a circular trajectory for testing purposes.
-
-#### **Usage**
-
-- For **ROS 1**:
-
-  ```shell
-  roslaunch hex_toolkit_general_chassis cart_gen.launch
-  ```
-
-- For **ROS 2**:
-
-  ```shell
-  ros2 launch hex_toolkit_general_chassis cart_gen.launch.py
-  ```
 
 #### **Published Topics**
 
@@ -148,6 +134,22 @@ The **Cart Gen** module generates a circular trajectory for testing purposes.
 | `cart_period`       | `double`         | Time to complete one full circle (s).            |
 | `cart_inverse_flag` | `bool`           | Specifies if the trajectory is counterclockwise. |
 
+#### **Related demos**
+
+- **cart_gen**:
+
+  - For **ROS 1**:
+
+    ```shell
+    roslaunch hex_toolkit_general_chassis cart_gen.launch
+    ```
+
+  - For **ROS 2**:
+
+    ```shell
+    ros2 launch hex_toolkit_general_chassis cart_gen.launch.py
+    ```
+
 ---
 
 ### **Joy Ctrl**
@@ -155,20 +157,6 @@ The **Cart Gen** module generates a circular trajectory for testing purposes.
 #### **Introduction**
 
 The **Joy Ctrl** module allows users to control the chassis using a gamepad.
-
-#### **Usage**
-
-- For **ROS 1**:
-
-  ```shell
-  roslaunch hex_toolkit_general_chassis joy_ctrl.launch
-  ```
-
-- For **ROS 2**:
-
-  ```shell
-  ros2 launch hex_toolkit_general_chassis joy_ctrl.launch.py
-  ```
 
 #### **Published Topics**
 
@@ -190,6 +178,22 @@ The **Joy Ctrl** module allows users to control the chassis using a gamepad.
 | `joy_vy`       | `string`  | Axis for y-axis linear velocity.          |
 | `joy_yaw`      | `string`  | Axis for z-axis angular velocity.         |
 
+#### **Related demos**
+
+- **joy_ctrl**:
+
+  - For **ROS 1**:
+
+    ```shell
+    roslaunch hex_toolkit_general_chassis joy_ctrl.launch
+    ```
+
+  - For **ROS 2**:
+
+    ```shell
+    ros2 launch hex_toolkit_general_chassis joy_ctrl.launch.py
+    ```
+
 ---
 
 ### **Key Ctrl**
@@ -197,20 +201,6 @@ The **Joy Ctrl** module allows users to control the chassis using a gamepad.
 #### **Introduction**
 
 The **Key Ctrl** module allows users to control the chassis using a keyboard.
-
-#### **Usage**
-
-- For **ROS 1**:
-
-  ```shell
-  roslaunch hex_toolkit_general_chassis key_ctrl.launch
-  ```
-
-- For **ROS 2**:
-
-  ```shell
-  ros2 launch hex_toolkit_general_chassis key_ctrl.launch.py
-  ```
 
 #### **Published Topics**
 
@@ -230,3 +220,19 @@ The **Key Ctrl** module allows users to control the chassis using a keyboard.
 | `key_vx`       | `vector<string>` | Keys for x-axis linear velocity.          |
 | `key_vy`       | `vector<string>` | Keys for y-axis linear velocity.          |
 | `key_yaw`      | `vector<string>` | Keys for z-axis angular velocity.         |
+
+#### **Related demos**
+
+- **key_ctrl**:
+
+  - For **ROS 1**:
+
+    ```shell
+    roslaunch hex_toolkit_general_chassis key_ctrl.launch
+    ```
+
+  - For **ROS 2**:
+
+    ```shell
+    ros2 launch hex_toolkit_general_chassis key_ctrl.launch.py
+    ```
