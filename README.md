@@ -30,12 +30,12 @@ The **hex_toolkit_general_chassis** package provides a suite of tools for robot 
 
 ### **Dependencies**
 
-For **Hex Chassis** users, we highly recommend using this package within our **Hex Docker Images** to ensure compatibility and streamlined setup.
+For **Hex Chassis** users, we highly recommend using this package within our **Hex Docker Images** to ensure compatibility and an optimized setup experience.
 
-If you prefer manual setup, please ensure the following dependencies are installed:
+If you choose to set up manually, please install the following dependencies:
 
-1. **ROS**  
-   Refer to the official [ROS](http://wiki.ros.org/ROS/Installation) and [ROS2](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html) Installation Guide.
+1. **ROS/ROS2**  
+   Follow the official [ROS Installation Guide](http://wiki.ros.org/ROS/Installation) or the [ROS2 Installation Guide](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html).
 
 2. **pygame**  
    Install via pip:
@@ -60,7 +60,13 @@ If you prefer manual setup, please ensure the following dependencies are install
    cd catkin_ws/src
    ```
 
-2. Build the workspace:
+2. Clone necessary repositories:
+
+   ```shell
+   git clone https://github.com/hexfellow/hex_toolkit_general_chassis.git
+   ```
+
+3. Build the workspace:
 
    - For **ROS 1**:
 
@@ -78,7 +84,7 @@ If you prefer manual setup, please ensure the following dependencies are install
 
 ### **Pre-Execution Steps**
 
-1. Source the appropriate setup file for your ROS version:
+1. Source the appropriate setup file based on your ROS version:
 
    - For **ROS 1**:
 
@@ -96,9 +102,11 @@ If you prefer manual setup, please ensure the following dependencies are install
 
 ## **Demos**
 
-- **Cart Gen**: Generate circular trajectories for testing.  
-- **Joy Ctrl**: Control the chassis with a gamepad.  
-- **Key Ctrl**: Control the chassis with a keyboard.
+The package provides the following demos:
+
+- **Cart Gen**: Generates circular trajectories for testing.  
+- **Joy Ctrl**: Enables chassis control using a gamepad.  
+- **Key Ctrl**: Enables chassis control using a keyboard.
 
 ---
 
@@ -106,7 +114,7 @@ If you prefer manual setup, please ensure the following dependencies are install
 
 #### **Introduction**
 
-The **Cart Gen** module generates a circular trajectory for chassis testing.
+The **Cart Gen** module generates a circular trajectory for testing purposes.
 
 #### **Usage**
 
@@ -178,9 +186,9 @@ The **Joy Ctrl** module allows users to control the chassis using a gamepad.
 | `ratio_vy`     | `double`  | Ratio of y-axis linear velocity (m/s).    |
 | `ratio_yaw`    | `double`  | Ratio of z-axis angular velocity (rad/s). |
 | `joy_deadzone` | `double`  | Deadzone for joystick axis input.         |
-| `joy_vx`       | `string`  | Axis name for x-axis linear velocity.     |
-| `joy_vy`       | `string`  | Axis name for y-axis linear velocity.     |
-| `joy_yaw`      | `string`  | Axis name for z-axis angular velocity.    |
+| `joy_vx`       | `string`  | Axis for x-axis linear velocity.          |
+| `joy_vy`       | `string`  | Axis for y-axis linear velocity.          |
+| `joy_yaw`      | `string`  | Axis for z-axis angular velocity.         |
 
 ---
 
@@ -188,7 +196,7 @@ The **Joy Ctrl** module allows users to control the chassis using a gamepad.
 
 #### **Introduction**
 
-The **Key Ctrl** module enables users to control the chassis using a keyboard.
+The **Key Ctrl** module allows users to control the chassis using a keyboard.
 
 #### **Usage**
 
@@ -219,6 +227,6 @@ The **Key Ctrl** module enables users to control the chassis using a keyboard.
 | `ratio_vx`     | `double`         | Ratio of x-axis linear velocity (m/s).    |
 | `ratio_vy`     | `double`         | Ratio of y-axis linear velocity (m/s).    |
 | `ratio_yaw`    | `double`         | Ratio of z-axis angular velocity (rad/s). |
-| `key_vx`       | `vector<string>` | Key for x-axis linear velocity.           |
-| `key_vy`       | `vector<string>` | Key for y-axis linear velocity.           |
-| `key_yaw`      | `vector<string>` | Key for z-axis angular velocity.          |
+| `key_vx`       | `vector<string>` | Keys for x-axis linear velocity.          |
+| `key_vy`       | `vector<string>` | Keys for y-axis linear velocity.          |
+| `key_yaw`      | `vector<string>` | Keys for z-axis angular velocity.         |
