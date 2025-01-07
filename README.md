@@ -40,14 +40,14 @@ If you choose to set up manually, please install the following dependencies:
 2. **pygame**  
    Install via pip:
 
-   ```shell
+   ```bash
    pip3 install pygame
    ```
 
 3. **pynput**  
    Install via pip:
 
-   ```shell
+   ```bash
    pip3 install pynput
    ```
 
@@ -55,48 +55,48 @@ If you choose to set up manually, please install the following dependencies:
 
 1. Create a ROS workspace and navigate to the `src` directory:
 
-   ```shell
+   ```bash
    mkdir -p catkin_ws/src
    cd catkin_ws/src
    ```
 
-2. Clone necessary repositories:
+2. Clone the required repositories:
 
-   ```shell
+   ```bash
    git clone https://github.com/hexfellow/hex_toolkit_general_chassis.git
    ```
 
 3. Build the workspace:
 
-   - For **ROS 1**:
+   - **ROS 1**:
 
-     ```shell
+     ```bash
      cd ../
      catkin_make
      ```
 
-   - For **ROS 2**:
+   - **ROS 2**:
 
-     ```shell
+     ```bash
      cd ../
      colcon build
      ```
 
 ### **Pre-Execution Steps**
 
-1. Source the appropriate setup file based on your ROS version:
+Source the appropriate setup file based on your ROS version:
 
-   - For **ROS 1**:
+- **ROS 1**:
 
-     ```shell
-     source devel/setup.bash --extend
-     ```
+  ```bash
+  source devel/setup.bash --extend
+  ```
 
-   - For **ROS 2**:
+- **ROS 2**:
 
-     ```shell
-     source install/setup.bash --extend
-     ```
+  ```bash
+  source install/setup.bash --extend
+  ```
 
 ---
 
@@ -211,13 +211,13 @@ This launch file launches `cart_gen.py`.
 
 - **ROS 1**:
 
-  ```shell
+  ```bash
   roslaunch hex_toolkit_general_chassis cart_gen.launch
   ```
 
 - **ROS 2**:
 
-  ```shell
+  ```bash
   ros2 launch hex_toolkit_general_chassis cart_gen.launch.py
   ```
 
@@ -233,13 +233,13 @@ This launch file launches `joy_ctrl.py`.
 
 - **ROS 1**:
 
-  ```shell
+  ```bash
   roslaunch hex_toolkit_general_chassis joy_ctrl.launch
   ```
 
 - **ROS 2**:
 
-  ```shell
+  ```bash
   ros2 launch hex_toolkit_general_chassis joy_ctrl.launch.py
   ```
 
@@ -255,12 +255,12 @@ This launch file launches `key_ctrl.py`.
 
 - **ROS 1**:
 
-  ```shell
+  ```bash
   roslaunch hex_toolkit_general_chassis key_ctrl.launch
   ```
 
 - **ROS 2**:
 
-  ```shell
+  ```bash
   ros2 launch hex_toolkit_general_chassis key_ctrl.launch.py
   ```
