@@ -17,21 +17,25 @@ from geometry_msgs.msg import Twist
 from geometry_msgs.msg import TwistStamped
 
 JOY_BUTTON_MAP = {
-    "L1": 6,
-    "L2": 8,
-    "R1": 7,
-    "R2": 9,
+    "L1": 4,
+    "L2": 6,
+    "R1": 5,
+    "R2": 7,
     "A": 0,
     "B": 1,
     "X": 3,
-    "Y": 4,
+    "Y": 2,
+    "LA": 11,
+    "RA": 12,
 }
 
 JOY_AXIS_MAP = {
-    "LX": 0,
-    "LY": 1,
-    "RX": 2,
+    "LX": 1,
+    "LY": 0,
+    "RX": 4,
     "RY": 3,
+    "L2": 2,
+    "R2": 5,
 }
 
 JOY_MOTION_MAP = {
