@@ -1,0 +1,18 @@
+<!--#######################################-->
+<!-- Copyright (c) 2025  Dong Zhaorui.     -->
+<!-- All rights reserved.                  -->
+<!-- Author: Dong Zhaorui 847235539@qq.com -->
+<!-- Date  : 2025-07-07                    -->
+<!--#######################################-->
+
+<launch>
+
+    # list target generator
+    <node name="list_gen" pkg="hex_toolkit_general_chasssis" type="list_gen.py" output="screen" >
+        # param
+        <rosparam file="$(find hex_toolkit_general_chasssis)/config/ros1/list_gen.yaml"/>
+        # publish
+        <remap from="/target_pose" to="/target_pose" />
+    </node>
+
+</launch>

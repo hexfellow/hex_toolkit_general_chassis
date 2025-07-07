@@ -7,10 +7,10 @@
 
 <launch>
 
-    # cartesian target generator
-    <node name="cart_gen" pkg="hex_toolkit_general_chasssis" type="cart_gen.py" output="screen" >
+    # circle target generator
+    <node name="circle_gen" pkg="hex_toolkit_general_chasssis" type="circle_gen.py" output="screen" >
         # param
-        <rosparam file="$(find hex_toolkit_general_chasssis)/config/ros1/cart_gen.yaml"/>
+        <rosparam file="$(find hex_toolkit_general_chasssis)/config/ros1/circle_gen.yaml"/>
         # publish
         <remap from="/target_pose" to="/target_pose" />
     </node>

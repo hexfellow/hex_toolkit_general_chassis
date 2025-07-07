@@ -6,15 +6,15 @@
 # Date  : 2024-12-23
 ################################################################
 
-import rospy
 import numpy as np
 
+import rospy
 from geometry_msgs.msg import PoseStamped
 
-from .math_util import MathUtil
+import hex_utils
 
 
-class CartGen:
+class CircleGen:
 
     def __init__(self, name: str = "unknown"):
         ### ros node
@@ -30,12 +30,12 @@ class CartGen:
             "base": rospy.get_param('~model_base', "base_link"),
             "odom": rospy.get_param('~model_odom', "odom"),
         }
-        # cart
-        self.__cart_param = {
-            "center": np.array(rospy.get_param('~cart_center', [0.0])),
-            "radius": rospy.get_param('~cart_radius', 1.0),
-            "period": rospy.get_param('~cart_period', 1.0),
-            "inverse_flag": rospy.get_param('~cart_inverse_flag', False),
+        # circle
+        self.__circle_param = {
+            "center": np.array(rospy.get_param('~circle_center', [0.0])),
+            "radius": rospy.get_param('~circle_radius', 1.0),
+            "period": rospy.get_param('~circle_period', 1.0),
+            "inverse_flag": rospy.get_param('~circle_inverse_flag', False),
         }
 
         ### publisher
@@ -47,7 +47,7 @@ class CartGen:
 
         ### variable
         # target list
-        self.__target_num = int(self.__cart_param["period"] *
+        self.__target_num = int(self.__circle_param["period"] *
                                 self.__rate_param["ros"])
         delta_theta = np.linspace(
             0,
@@ -55,13 +55,13 @@ class CartGen:
             self.__target_num,
             endpoint=False,
         )
-        target_pos = self.__cart_param[
-            "center"] + self.__cart_param["radius"] * np.stack(
+        target_pos = self.__circle_param[
+            "center"] + self.__circle_param["radius"] * np.stack(
                 [np.sin(delta_theta), np.cos(delta_theta)], axis=1)
-        target_yaw = MathUtil.angle_norm(-delta_theta)
+        target_yaw = hex_utils.angle_norm(-delta_theta)
         self.__target_list = np.stack(
             [target_pos[:, 0], target_pos[:, 1], target_yaw], axis=1)
-        if self.__cart_param["inverse_flag"]:
+        if self.__circle_param["inverse_flag"]:
             self.__target_list = self.__target_list[::-1]
             self.__target_list[-1] *= -1
         # target message

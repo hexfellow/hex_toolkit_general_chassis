@@ -38,7 +38,8 @@ setup(
     license='TODO: License declaration',
     entry_points={
         'console_scripts': [
-            "cart_gen = hex_toolkit_general_chasssis.cart_gen:main",
+            "circle_gen = hex_toolkit_general_chasssis.circle_gen:main",
+            "list_gen = hex_toolkit_general_chasssis.list_gen:main",
             "joy_ctrl = hex_toolkit_general_chasssis.joy_ctrl:main",
             "key_ctrl = hex_toolkit_general_chasssis.key_ctrl:main",
         ],

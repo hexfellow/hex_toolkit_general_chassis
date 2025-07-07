@@ -6,17 +6,18 @@
 # Date  : 2024-12-23
 ################################################################
 
+import json
+import numpy as np
+
 import rclpy
 import rclpy.node
-import numpy as np
 import threading
-
 from geometry_msgs.msg import PoseStamped
 
-from .math_util import MathUtil
+import hex_utils
 
 
-class CartGen:
+class ListGen:
 
     def __init__(self, name: str = "unknown"):
         ### ros node
@@ -33,22 +34,24 @@ class CartGen:
         # declare parameters
         self.__node.declare_parameter('model_base', "unknown")
         self.__node.declare_parameter('model_odom', "unknown")
-        self.__node.declare_parameter('cart_center', [0.0])
-        self.__node.declare_parameter('cart_radius', 1.0)
-        self.__node.declare_parameter('cart_period', 1.0)
-        self.__node.declare_parameter('cart_inverse_flag', False)
+        self.__node.declare_parameter('list_target', ["[0.0, 0.0, 0.0]"])
+        self.__node.declare_parameter('list_switch', 1.0)
+        self.__node.declare_parameter('list_inverse_flag', False)
         # model
         self.__model_param = {
             "base": self.__node.get_parameter('model_base').value,
             "odom": self.__node.get_parameter('model_odom').value,
         }
-        # cart
-        self.__cart_param = {
-            "center": np.array(self.__node.get_parameter('cart_center').value),
-            "radius": self.__node.get_parameter('cart_radius').value,
-            "period": self.__node.get_parameter('cart_period').value,
+        # list
+        self.__list_param = {
+            "target":
+            np.array(
+                self.__str_to_list(
+                    self.__node.get_parameter('list_target').value)),
+            "switch":
+            self.__node.get_parameter('list_switch').value,
             "inverse_flag":
-            self.__node.get_parameter('cart_inverse_flag').value,
+            self.__node.get_parameter('list_inverse_flag').value,
         }
 
         ### publisher
@@ -60,23 +63,13 @@ class CartGen:
 
         ### variable
         # target list
-        self.__target_num = int(self.__cart_param["period"] *
+        self.__switch_num = int(self.__list_param["switch"] *
                                 self.__rate_param["ros"])
-        delta_theta = np.linspace(
-            0,
-            2 * np.pi,
-            self.__target_num,
-            endpoint=False,
-        )
-        target_pos = self.__cart_param[
-            "center"] + self.__cart_param["radius"] * np.stack(
-                [np.sin(delta_theta), np.cos(delta_theta)], axis=1)
-        target_yaw = MathUtil.angle_norm(-delta_theta)
-        self.__target_list = np.stack(
-            [target_pos[:, 0], target_pos[:, 1], target_yaw], axis=1)
-        if self.__cart_param["inverse_flag"]:
+        self.__pause_num = int(self.__switch_num * 0.75)
+        self.__target_list = self.__list_param["target"]
+        if self.__list_param["inverse_flag"]:
             self.__target_list = self.__target_list[::-1]
-            self.__target_list[-1] *= -1
+            self.__target_list[:, 2] *= -1
         # target message
         self.__tar_msg = PoseStamped()
         self.__tar_msg.header.frame_id = self.__model_param["odom"]
@@ -87,6 +80,13 @@ class CartGen:
 
     def __spin(self):
         rclpy.spin(self.__node)
+
+    def __str_to_list(self, list_str) -> list:
+        result = []
+        for s in list_str:
+            l = json.loads(s)
+            result.append(l)
+        return result
 
     def __pose2d23d(
         self,
@@ -99,11 +99,18 @@ class CartGen:
         return pos, quat
 
     def work(self):
+        switch_count = 0
         curr_target_idx = 0
         while rclpy.ok():
             # update target message
-            x, y, yaw = self.__target_list[curr_target_idx]
-            pos, quat = self.__pose2d23d(x, y, yaw)
+            target_1 = self.__target_list[curr_target_idx]
+            target_2 = self.__target_list[(curr_target_idx + 1) %
+                                          self.__target_list.shape[0]]
+            ratio = 1.0 if switch_count > self.__pause_num else switch_count / self.__pause_num
+            delta = target_2 - target_1
+            delta[2] = hex_utils.angle_norm(delta[2])
+            target = target_1 + delta * ratio
+            pos, quat = self.__pose2d23d(target[0], target[1], target[2])
             self.__tar_msg.pose.position.x = pos[0]
             self.__tar_msg.pose.position.y = pos[1]
             self.__tar_msg.pose.position.z = pos[2]
@@ -118,5 +125,8 @@ class CartGen:
             self.__target_pose_pub.publish(self.__tar_msg)
 
             # loop end process
-            curr_target_idx = (curr_target_idx + 1) % self.__target_num
+            switch_count = (switch_count + 1) % self.__switch_num
+            if switch_count == 0:
+                curr_target_idx = (curr_target_idx +
+                                   1) % self.__target_list.shape[0]
             self.__rate.sleep()

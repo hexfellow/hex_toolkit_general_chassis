@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 ################################################################
-# Copyright 2024 Dong Zhaorui. All rights reserved.
+# Copyright 2025 Dong Zhaorui. All rights reserved.
 # Author: Dong Zhaorui 847235539@qq.com
-# Date  : 2024-12-23
+# Date  : 2025-07-07
 ################################################################
 
 from launch import LaunchDescription
@@ -18,20 +18,20 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 
 def generate_launch_description():
-    # cartesian target generator
-    cart_gen_path = FindPackageShare('hex_toolkit_general_chasssis').find(
-        'hex_toolkit_general_chasssis') + '/config/ros2/cart_gen.yaml'
-    cart_gen_node = Node(
+    # list target generator
+    list_gen_path = FindPackageShare('hex_toolkit_general_chasssis').find(
+        'hex_toolkit_general_chasssis') + '/config/ros2/list_gen.yaml'
+    list_gen_node = Node(
         package='hex_toolkit_general_chasssis',
-        executable='cart_gen',
-        name='cart_gen',
+        executable='list_gen',
+        name='list_gen',
         output="screen",
         emulate_tty=True,
         parameters=[
             {
                 'use_sim_time': False,
             },
-            cart_gen_path,
+            list_gen_path,
         ],
         remappings=[
             # publish
@@ -40,6 +40,6 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
-        # cartesian target generator
-        cart_gen_node,
+        # list target generator
+        list_gen_node,
     ])
