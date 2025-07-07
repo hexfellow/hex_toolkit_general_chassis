@@ -106,11 +106,14 @@ class ListGen:
             target_1 = self.__target_list[curr_target_idx]
             target_2 = self.__target_list[(curr_target_idx + 1) %
                                           self.__target_list.shape[0]]
-            ratio = 1.0 if switch_count > self.__pause_num else switch_count / self.__pause_num
-            delta = target_2 - target_1
-            delta[2] = hex_utils.angle_norm(delta[2])
-            target = target_1 + delta * ratio
-            pos, quat = self.__pose2d23d(target[0], target[1], target[2])
+            if switch_count > self.__pause_num:
+                x, y, yaw = target_2
+            else:
+                ratio = switch_count / self.__pause_num
+                pos_delta = target_2[:2] - target_1[:2]
+                x, y = target_1[:2] + pos_delta * ratio
+                yaw = np.arctan2(pos_delta[1], pos_delta[0])
+            pos, quat = self.__pose2d23d(x, y, yaw)
             self.__tar_msg.pose.position.x = pos[0]
             self.__tar_msg.pose.position.y = pos[1]
             self.__tar_msg.pose.position.z = pos[2]
