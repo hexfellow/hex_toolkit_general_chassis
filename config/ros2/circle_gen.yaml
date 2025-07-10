@@ -12,5 +12,5 @@ circle_gen:
       - 0.0
       - 0.0
     circle_radius: 2.0
-    circle_period: 15.0
+    arc_length: 0.1
     circle_inverse_flag: false

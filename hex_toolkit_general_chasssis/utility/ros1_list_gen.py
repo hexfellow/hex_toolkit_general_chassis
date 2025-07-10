@@ -11,6 +11,7 @@ import numpy as np
 
 import rospy
 from geometry_msgs.msg import PoseStamped
+from nav_msgs.msg import Odometry
 
 import hex_utils
 
@@ -38,7 +39,7 @@ class ListGen:
                 self.__str_to_list(
                     rospy.get_param('~list_target', ["[0.0, 0.0, 0.0]"]))),
             "switch":
-            rospy.get_param('~list_switch', 1.0),
+            rospy.get_param('~switch_distance', 1.0),
             "inverse_flag":
             rospy.get_param('~list_inverse_flag', False),
         }
@@ -50,11 +51,20 @@ class ListGen:
             queue_size=10,
         )
 
+        ### subscriber
+        self.__chassis_odom_sub = rospy.Subscriber(
+            'odom', 
+            Odometry, 
+            self.__chassis_odom_callback
+        )
+
         ### variable
+        # current position
+        self.__current_x = 0.0
+        self.__current_y = 0.0
+        self.__current_yaw = 0.0
         # target list
-        self.__switch_num = int(self.__list_param["switch"] *
-                                self.__rate_param["ros"])
-        self.__pause_num = int(self.__switch_num * 0.75)
+        self.__switch_distance = self.__list_param["switch"] 
         self.__target_list = self.__list_param["target"]
         if self.__list_param["inverse_flag"]:
             self.__target_list = self.__target_list[::-1]
@@ -79,22 +89,27 @@ class ListGen:
         pos = np.array([x, y, 0.0])
         quat = np.array([np.cos(yaw * 0.5), 0.0, 0.0, np.sin(yaw * 0.5)])
         return pos, quat
+    
+    def __chassis_odom_callback(self, msg: Odometry):
+        self.__current_x = msg.pose.pose.position.x
+        self.__current_y = msg.pose.pose.position.y
+        qw = msg.pose.pose.orientation.w
+        qz = msg.pose.pose.orientation.z
+        self.__current_yaw = 2 * np.atan2(qz, qw) 
 
     def work(self):
-        switch_count = 0
         curr_target_idx = 0
         while not rospy.is_shutdown():
             # update target message
-            target_1 = self.__target_list[curr_target_idx]
-            target_2 = self.__target_list[(curr_target_idx + 1) %
-                                          self.__target_list.shape[0]]
-            if switch_count > self.__pause_num:
-                x, y, yaw = target_2
-            else:
-                ratio = switch_count / self.__pause_num
-                pos_delta = target_2[:2] - target_1[:2]
-                x, y = target_1[:2] + pos_delta * ratio
-                yaw = np.arctan2(pos_delta[1], pos_delta[0])
+            target = self.__target_list[curr_target_idx]
+            x, y, yaw = target
+
+            dist = np.hypot(self.__current_x - x, self.__current_y - y)
+            if dist < self.__switch_distance:
+                curr_target_idx = (curr_target_idx + 1) % len(self.__target_list)
+                target = self.__target_list[curr_target_idx]
+                x, y, yaw = target
+
             pos, quat = self.__pose2d23d(x, y, yaw)
             self.__tar_msg.pose.position.x = pos[0]
             self.__tar_msg.pose.position.y = pos[1]
@@ -108,9 +123,4 @@ class ListGen:
             self.__tar_msg.header.stamp = rospy.Time.now()
             self.__target_pose_pub.publish(self.__tar_msg)
 
-            # loop end process
-            switch_count = (switch_count + 1) % self.__switch_num
-            if switch_count == 0:
-                curr_target_idx = (curr_target_idx +
-                                   1) % self.__target_list.shape[0]
             self.__rate.sleep()

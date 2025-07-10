@@ -11,5 +11,5 @@ list_target:
   - "[1.5, -1.5, -2.35619449]"
   - "[-1.5, -1.5, 2.35619449]"
   - "[-1.5, 1.5, 0.78539816]"
-list_switch: 4.0
+switch_distance: 0.1
 list_inverse_flag: false
