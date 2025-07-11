@@ -49,7 +49,7 @@ class ListGen:
             np.array(
                 self.__str_to_list(
                     self.__node.get_parameter('list_target').value)),
-            "switch":
+            "switch_distance":
             self.__node.get_parameter('switch_distance').value,
             "inverse_flag":
             self.__node.get_parameter('list_inverse_flag').value,
@@ -72,11 +72,9 @@ class ListGen:
 
         ### variable
         # current position
-        self.__current_x = 0.0
-        self.__current_y = 0.0
-        self.__current_yaw = 0.0
+        self.__current_pose = np.zeros(3)
         # target list
-        self.__switch_distance = self.__list_param["switch"] 
+        self.__switch_distance = self.__list_param["switch_distance"] 
         self.__target_list = self.__list_param["target"]
         if self.__list_param["inverse_flag"]:
             self.__target_list = self.__target_list[::-1]
@@ -110,26 +108,21 @@ class ListGen:
         return pos, quat
 
     def __chassis_odom_callback(self, msg: Odometry):
-        self.__current_x = msg.pose.pose.position.x
-        self.__current_y = msg.pose.pose.position.y
+        self.__current_pose[0] = msg.pose.pose.position.x
+        self.__current_pose[1] = msg.pose.pose.position.y
         qw = msg.pose.pose.orientation.w
         qz = msg.pose.pose.orientation.z
-        self.__current_yaw = 2 * np.atan2(qz, qw)    
+        self.__current_pose[2]= 2 * np.arctan2(qz, qw)    
 
     def work(self):
         curr_target_idx = 0
         while rclpy.ok():
             # update target message
             target = self.__target_list[curr_target_idx]
-            x, y, yaw = target
-
-            dist = np.hypot(self.__current_x - x, self.__current_y - y)
+            dist = np.linalg.norm(self.__current_pose[:2]-target[:2])
             if dist < self.__switch_distance:
                 curr_target_idx = (curr_target_idx + 1) % len(self.__target_list)
-                target = self.__target_list[curr_target_idx]
-                x, y, yaw = target
-            
-            pos, quat = self.__pose2d23d(x, y, yaw)
+            pos, quat = self.__pose2d23d(target[0], target[1], target[2])
             self.__tar_msg.pose.position.x = pos[0]
             self.__tar_msg.pose.position.y = pos[1]
             self.__tar_msg.pose.position.z = pos[2]

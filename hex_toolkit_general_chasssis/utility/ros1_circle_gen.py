@@ -54,10 +54,8 @@ class CircleGen:
         )
 
         ### variable
-        # current position
-        self.__current_x = 0.0
-        self.__current_y = 0.0
-        self.__current_yaw = 0.0
+        # current pose
+        self.__current_pose = np.zeros(3)
         # arc_length to angle
         self.__arc_angle = self.__circle_param["arc_length"] / self.__circle_param["radius"]
         # target message
@@ -75,17 +73,16 @@ class CircleGen:
         return pos, quat
 
     def __chassis_odom_callback(self, msg: Odometry):
-        self.__current_x = msg.pose.pose.position.x
-        self.__current_y = msg.pose.pose.position.y
-        
+        self.__current_pose[0] = msg.pose.pose.position.x
+        self.__current_pose[1] = msg.pose.pose.position.y
         qw = msg.pose.pose.orientation.w
         qz = msg.pose.pose.orientation.z
-        self.__current_yaw = 2 * np.atan2(qz, qw)
+        self.__current_pose[2]= 2 * np.arctan2(qz, qw)    
     
     def __calculate_target_position(self):
-        robot_x_rel = self.__current_x - self.__circle_param["center"][0]
-        robot_y_rel = self.__current_y - self.__circle_param["center"][1]
-        robot_angle = np.atan2(robot_y_rel, robot_x_rel)
+        robot_x_rel = self.__current_pose[0] - self.__circle_param["center"][0]
+        robot_y_rel = self.__current_pose[1] - self.__circle_param["center"][1]
+        robot_angle = np.arctan2(robot_y_rel, robot_x_rel)
         target_angle = robot_angle + self.__arc_angle
         
         target_x = self.__circle_param["center"][0] + self.__circle_param["radius"] * np.cos(target_angle)
