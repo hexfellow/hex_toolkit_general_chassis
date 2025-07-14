@@ -86,7 +86,8 @@ class CircleGen:
         self.__target_list = np.array(self.__target_list)
         if self.__circle_param["inverse_flag"]:
             self.__target_list = self.__target_list[::-1]
-            self.__target_list[:, 2] *= -1.0
+            self.__target_list[:, 2] = hex_utils.angle_norm(
+                self.__target_list[:, 2] + np.pi)
         self.__total_num = self.__target_list.shape[0]
 
         # curr
