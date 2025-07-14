@@ -81,7 +81,7 @@ class CircleGen:
                 0] + self.__circle_param["radius"] * np.cos(ratio * 2 * np.pi)
             y = self.__circle_param["center"][
                 1] + self.__circle_param["radius"] * np.sin(ratio * 2 * np.pi)
-            yaw = np.arctan2(y, x)
+            yaw = hex_utils.angle_norm(np.arctan2(y, x) + np.pi / 2.0)
             self.__target_list.append([x, y, yaw])
         self.__target_list = np.array(self.__target_list)
         if self.__circle_param["inverse_flag"]:
