@@ -39,6 +39,7 @@ class ListGen:
         self.__node.declare_parameter('list_interpolation', 1_000)
         self.__node.declare_parameter('list_switch_dist', 0.1)
         self.__node.declare_parameter('list_inverse_flag', False)
+        self.__node.declare_parameter('list_fixed_head', False)
         # model
         self.__model_param = {
             "base": self.__node.get_parameter('model_base').value,
@@ -56,6 +57,8 @@ class ListGen:
             self.__node.get_parameter('list_switch_dist').value,
             "inverse_flag":
             self.__node.get_parameter('list_inverse_flag').value,
+            "fixed_head":
+            self.__node.get_parameter('list_fixed_head').value,
         }
 
         ### publisher
@@ -84,13 +87,15 @@ class ListGen:
                 ratio = j / self.__list_param["interpolation"]
                 pos_delta = target_2[:2] - target_1[:2]
                 x, y = target_1[:2] + pos_delta * ratio
-                yaw = np.arctan2(pos_delta[1], pos_delta[0])
+                yaw = 0.0 if self.__list_param["fixed_head"] else np.arctan2(
+                    pos_delta[1], pos_delta[0])
                 self.__target_list.append([x, y, yaw])
         self.__target_list = np.array(self.__target_list)
         if self.__list_param["inverse_flag"]:
             self.__target_list = self.__target_list[::-1]
-            self.__target_list[:, 2] = hex_utils.angle_norm(
-                self.__target_list[:, 2] + np.pi)
+            if not self.__list_param["fixed_head"]:
+                self.__target_list[:, 2] = hex_utils.angle_norm(
+                    self.__target_list[:, 2] + np.pi)
         self.__total_num = self.__target_list.shape[0]
 
         # curr

@@ -13,3 +13,4 @@ circle_radius: 2.0
 circle_interpolation: 3000
 circle_switch_dist: 0.1
 circle_inverse_flag: false
+circle_fixed_head: false

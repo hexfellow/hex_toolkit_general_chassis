@@ -38,6 +38,7 @@ class CircleGen:
             "interpolation": rospy.get_param('~circle_interpolation', 1_000),
             "switch_dist": rospy.get_param('~circle_switch_dist', 0.1),
             "inverse_flag": rospy.get_param('~circle_inverse_flag', False),
+            "fixed_head": rospy.get_param('~circle_fixed_head', False),
         }
 
         ### publisher
@@ -64,13 +65,16 @@ class CircleGen:
                 0] + self.__circle_param["radius"] * np.cos(ratio * 2 * np.pi)
             y = self.__circle_param["center"][
                 1] + self.__circle_param["radius"] * np.sin(ratio * 2 * np.pi)
-            yaw = hex_utils.angle_norm(np.arctan2(y, x) + np.pi / 2.0)
+            yaw = 0.0 if self.__circle_param[
+                "fixed_head"] else hex_utils.angle_norm(
+                    np.arctan2(y, x) + np.pi / 2.0)
             self.__target_list.append([x, y, yaw])
         self.__target_list = np.array(self.__target_list)
         if self.__circle_param["inverse_flag"]:
             self.__target_list = self.__target_list[::-1]
-            self.__target_list[:, 2] = hex_utils.angle_norm(
-                self.__target_list[:, 2] + np.pi)
+            if not self.__circle_param["fixed_head"]:
+                self.__target_list[:, 2] = hex_utils.angle_norm(
+                    self.__target_list[:, 2] + np.pi)
         self.__total_num = self.__target_list.shape[0]
 
         # curr

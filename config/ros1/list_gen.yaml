@@ -14,3 +14,4 @@ list_target:
 list_interpolation: 1000
 list_switch_dist: 0.1
 list_inverse_flag: false
+list_fixed_head: false

@@ -55,6 +55,7 @@ class CircleGen:
             self.__node.get_parameter('circle_switch_dist').value,
             "inverse_flag":
             self.__node.get_parameter('circle_inverse_flag').value,
+            "fixed_head": self.__node.get_parameter('circle_fixed_head').value,
         }
 
         ### publisher
@@ -81,13 +82,16 @@ class CircleGen:
                 0] + self.__circle_param["radius"] * np.cos(ratio * 2 * np.pi)
             y = self.__circle_param["center"][
                 1] + self.__circle_param["radius"] * np.sin(ratio * 2 * np.pi)
-            yaw = hex_utils.angle_norm(np.arctan2(y, x) + np.pi / 2.0)
+            yaw = 0.0 if self.__circle_param[
+                "fixed_head"] else hex_utils.angle_norm(
+                    np.arctan2(y, x) + np.pi / 2.0)
             self.__target_list.append([x, y, yaw])
         self.__target_list = np.array(self.__target_list)
         if self.__circle_param["inverse_flag"]:
             self.__target_list = self.__target_list[::-1]
-            self.__target_list[:, 2] = hex_utils.angle_norm(
-                self.__target_list[:, 2] + np.pi)
+            if not self.__circle_param["fixed_head"]:
+                self.__target_list[:, 2] = hex_utils.angle_norm(
+                    self.__target_list[:, 2] + np.pi)
         self.__total_num = self.__target_list.shape[0]
 
         # curr
