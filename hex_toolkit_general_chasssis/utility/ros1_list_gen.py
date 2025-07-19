@@ -18,7 +18,7 @@ import hex_utils
 
 class ListGen:
 
-    def __init__(self, name: str = "unknown"):
+    def __init__(self, name="unknown"):
         ### ros node
         rospy.init_node(name, anonymous=True)
         self.__rate_param = {
@@ -35,17 +35,17 @@ class ListGen:
         # list
         self.__list_param = {
             "target":
-            np.array(
-                self.__str_to_list(
-                    rospy.get_param('~list_target', ["[0.0, 0.0, 0.0]"]))),
+                np.array(
+                    self.__str_to_list(
+                        rospy.get_param('~list_target', ["[0.0, 0.0, 0.0]"]))),
             "interpolation":
-            rospy.get_param('~list_interpolation', 1.0),
+                rospy.get_param('~list_interpolation', 1.0),
             "switch_dist":
-            rospy.get_param('~list_switch_dist', 0.1),
+                rospy.get_param('~list_switch_dist', 0.1),
             "inverse_flag":
-            rospy.get_param('~list_inverse_flag', False),
+                rospy.get_param('~list_inverse_flag', False),
             "fixed_head":
-            rospy.get_param('~list_fixed_head', False),
+                rospy.get_param('~list_fixed_head', False),
         }
 
         ### publisher
@@ -92,7 +92,7 @@ class ListGen:
         self.__tar_msg = PoseStamped()
         self.__tar_msg.header.frame_id = self.__model_param["odom"]
 
-    def __str_to_list(self, list_str) -> list:
+    def __str_to_list(self, list_str):
         result = []
         for s in list_str:
             l = json.loads(s)
@@ -112,12 +112,7 @@ class ListGen:
                 ])),
         ])
 
-    def __pose2d23d(
-        self,
-        x: float,
-        y: float,
-        yaw: float,
-    ):
+    def __pose2d23d(self, x, y, yaw):
         pos = np.array([x, y, 0.0])
         quat = np.array([np.cos(yaw * 0.5), 0.0, 0.0, np.sin(yaw * 0.5)])
         return pos, quat
@@ -127,7 +122,7 @@ class ListGen:
         while not rospy.is_shutdown():
             while np.linalg.norm(self.__curr_pose[:2] -
                                  self.__target_list[curr_idx][:2]
-                                 ) < self.__list_param["switch_dist"]:
+                                ) < self.__list_param["switch_dist"]:
                 curr_idx = (curr_idx + 1) % self.__total_num
 
             # update target message

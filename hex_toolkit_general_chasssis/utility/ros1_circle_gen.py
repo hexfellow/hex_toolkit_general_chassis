@@ -17,7 +17,7 @@ import hex_utils
 
 class CircleGen:
 
-    def __init__(self, name: str = "unknown"):
+    def __init__(self, name="unknown"):
         ### ros node
         rospy.init_node(name, anonymous=True)
         self.__rate_param = {
@@ -84,12 +84,7 @@ class CircleGen:
         self.__tar_msg = PoseStamped()
         self.__tar_msg.header.frame_id = self.__model_param["odom"]
 
-    def __pose2d23d(
-        self,
-        x: float,
-        y: float,
-        yaw: float,
-    ):
+    def __pose2d23d(self, x, y, yaw):
         pos = np.array([x, y, 0.0])
         quat = np.array([np.cos(yaw * 0.5), 0.0, 0.0, np.sin(yaw * 0.5)])
         return pos, quat

@@ -19,7 +19,7 @@ import hex_utils
 
 class CircleGen:
 
-    def __init__(self, name: str = "unknown"):
+    def __init__(self, name="unknown"):
         ### ros node
         rclpy.init()
         self.__node = rclpy.node.Node(name)
@@ -39,6 +39,7 @@ class CircleGen:
         self.__node.declare_parameter('circle_interpolation', 1_000)
         self.__node.declare_parameter('circle_switch_dist', 0.1)
         self.__node.declare_parameter('circle_inverse_flag', False)
+        self.__node.declare_parameter('circle_fixed_head', False)
         # model
         self.__model_param = {
             "base": self.__node.get_parameter('model_base').value,
@@ -108,12 +109,7 @@ class CircleGen:
     def __spin(self):
         rclpy.spin(self.__node)
 
-    def __pose2d23d(
-        self,
-        x: float,
-        y: float,
-        yaw: float,
-    ):
+    def __pose2d23d(self, x, y, yaw):
         pos = np.array([x, y, 0.0])
         quat = np.array([np.cos(yaw * 0.5), 0.0, 0.0, np.sin(yaw * 0.5)])
         return pos, quat

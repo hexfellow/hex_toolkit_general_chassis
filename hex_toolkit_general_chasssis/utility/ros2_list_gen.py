@@ -20,7 +20,7 @@ import hex_utils
 
 class ListGen:
 
-    def __init__(self, name: str = "unknown"):
+    def __init__(self, name="unknown"):
         ### ros node
         rclpy.init()
         self.__node = rclpy.node.Node(name)
@@ -48,17 +48,17 @@ class ListGen:
         # list
         self.__list_param = {
             "target":
-            np.array(
-                self.__str_to_list(
-                    self.__node.get_parameter('list_target').value)),
+                np.array(
+                    self.__str_to_list(
+                        self.__node.get_parameter('list_target').value)),
             "interpolation":
-            self.__node.get_parameter('list_interpolation').value,
+                self.__node.get_parameter('list_interpolation').value,
             "switch_dist":
-            self.__node.get_parameter('list_switch_dist').value,
+                self.__node.get_parameter('list_switch_dist').value,
             "inverse_flag":
-            self.__node.get_parameter('list_inverse_flag').value,
+                self.__node.get_parameter('list_inverse_flag').value,
             "fixed_head":
-            self.__node.get_parameter('list_fixed_head').value,
+                self.__node.get_parameter('list_fixed_head').value,
         }
 
         ### publisher
@@ -112,19 +112,14 @@ class ListGen:
     def __spin(self):
         rclpy.spin(self.__node)
 
-    def __str_to_list(self, list_str) -> list:
+    def __str_to_list(self, list_str):
         result = []
         for s in list_str:
             l = json.loads(s)
             result.append(l)
         return result
 
-    def __pose2d23d(
-        self,
-        x: float,
-        y: float,
-        yaw: float,
-    ):
+    def __pose2d23d(self, x, y, yaw):
         pos = np.array([x, y, 0.0])
         quat = np.array([np.cos(yaw * 0.5), 0.0, 0.0, np.sin(yaw * 0.5)])
         return pos, quat
@@ -147,7 +142,7 @@ class ListGen:
         while rclpy.ok():
             while np.linalg.norm(self.__curr_pose[:2] -
                                  self.__target_list[curr_idx][:2]
-                                 ) < self.__list_param["switch_dist"]:
+                                ) < self.__list_param["switch_dist"]:
                 curr_idx = (curr_idx + 1) % self.__total_num
             print(curr_idx)
 
@@ -163,8 +158,7 @@ class ListGen:
             self.__tar_msg.pose.orientation.z = quat[3]
 
             # publish target message
-            self.__tar_msg.header.stamp = self.__node.get_clock().now().to_msg(
-            )
+            self.__tar_msg.header.stamp = self.__node.get_clock().now().to_msg()
             self.__target_pose_pub.publish(self.__tar_msg)
 
             # loop end process
