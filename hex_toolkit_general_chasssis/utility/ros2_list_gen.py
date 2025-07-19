@@ -20,7 +20,7 @@ import hex_utils
 
 class ListGen:
 
-    def __init__(self, name="unknown"):
+    def __init__(self, name: str = "unknown"):
         ### ros node
         rclpy.init()
         self.__node = rclpy.node.Node(name)

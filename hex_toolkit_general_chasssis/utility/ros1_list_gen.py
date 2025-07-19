@@ -18,7 +18,7 @@ import hex_utils
 
 class ListGen:
 
-    def __init__(self, name="unknown"):
+    def __init__(self, name: str = "unknown"):
         ### ros node
         rospy.init_node(name, anonymous=True)
         self.__rate_param = {

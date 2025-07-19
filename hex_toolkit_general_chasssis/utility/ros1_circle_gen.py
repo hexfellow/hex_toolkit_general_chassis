@@ -17,7 +17,7 @@ import hex_utils
 
 class CircleGen:
 
-    def __init__(self, name="unknown"):
+    def __init__(self, name: str = "unknown"):
         ### ros node
         rospy.init_node(name, anonymous=True)
         self.__rate_param = {
@@ -107,7 +107,7 @@ class CircleGen:
         while not rospy.is_shutdown():
             while np.linalg.norm(self.__curr_pose[:2] -
                                  self.__target_list[curr_idx][:2]
-                                 ) < self.__circle_param["switch_dist"]:
+                                ) < self.__circle_param["switch_dist"]:
                 curr_idx = (curr_idx + 1) % self.__total_num
 
             # update target message

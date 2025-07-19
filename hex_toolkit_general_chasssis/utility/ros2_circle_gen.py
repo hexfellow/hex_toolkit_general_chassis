@@ -19,7 +19,7 @@ import hex_utils
 
 class CircleGen:
 
-    def __init__(self, name="unknown"):
+    def __init__(self, name: str = "unknown"):
         ### ros node
         rclpy.init()
         self.__node = rclpy.node.Node(name)
@@ -48,15 +48,17 @@ class CircleGen:
         # circle
         self.__circle_param = {
             "center":
-            np.array(self.__node.get_parameter('circle_center').value),
-            "radius": self.__node.get_parameter('circle_radius').value,
+                np.array(self.__node.get_parameter('circle_center').value),
+            "radius":
+                self.__node.get_parameter('circle_radius').value,
             "interpolation":
-            self.__node.get_parameter('circle_interpolation').value,
+                self.__node.get_parameter('circle_interpolation').value,
             "switch_dist":
-            self.__node.get_parameter('circle_switch_dist').value,
+                self.__node.get_parameter('circle_switch_dist').value,
             "inverse_flag":
-            self.__node.get_parameter('circle_inverse_flag').value,
-            "fixed_head": self.__node.get_parameter('circle_fixed_head').value,
+                self.__node.get_parameter('circle_inverse_flag').value,
+            "fixed_head":
+                self.__node.get_parameter('circle_fixed_head').value,
         }
 
         ### publisher
@@ -132,7 +134,7 @@ class CircleGen:
         while rclpy.ok():
             while np.linalg.norm(self.__curr_pose[:2] -
                                  self.__target_list[curr_idx][:2]
-                                 ) < self.__circle_param["switch_dist"]:
+                                ) < self.__circle_param["switch_dist"]:
                 curr_idx = (curr_idx + 1) % self.__total_num
 
             # update curr pose
@@ -150,8 +152,7 @@ class CircleGen:
             self.__tar_msg.pose.orientation.z = quat[3]
 
             # publish target message
-            self.__tar_msg.header.stamp = self.__node.get_clock().now().to_msg(
-            )
+            self.__tar_msg.header.stamp = self.__node.get_clock().now().to_msg()
             self.__target_pose_pub.publish(self.__tar_msg)
 
             # loop end process
