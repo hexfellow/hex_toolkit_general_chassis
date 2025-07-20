@@ -35,17 +35,17 @@ class ListGen:
         # list
         self.__list_param = {
             "target":
-                np.array(
-                    self.__str_to_list(
-                        rospy.get_param('~list_target', ["[0.0, 0.0, 0.0]"]))),
+            np.array(
+                self.__str_to_list(
+                    rospy.get_param('~list_target', ["[0.0, 0.0, 0.0]"]))),
             "interpolation":
-                rospy.get_param('~list_interpolation', 1.0),
+            rospy.get_param('~list_interpolation', 1.0),
             "switch_dist":
-                rospy.get_param('~list_switch_dist', 0.1),
+            rospy.get_param('~list_switch_dist', 0.1),
             "inverse_flag":
-                rospy.get_param('~list_inverse_flag', False),
+            rospy.get_param('~list_inverse_flag', False),
             "fixed_head":
-                rospy.get_param('~list_fixed_head', False),
+            rospy.get_param('~list_fixed_head', False),
         }
 
         ### publisher
@@ -122,7 +122,7 @@ class ListGen:
         while not rospy.is_shutdown():
             while np.linalg.norm(self.__curr_pose[:2] -
                                  self.__target_list[curr_idx][:2]
-                                ) < self.__list_param["switch_dist"]:
+                                 ) < self.__list_param["switch_dist"]:
                 curr_idx = (curr_idx + 1) % self.__total_num
 
             # update target message

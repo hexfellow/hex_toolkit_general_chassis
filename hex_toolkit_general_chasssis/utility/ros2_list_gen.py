@@ -48,17 +48,17 @@ class ListGen:
         # list
         self.__list_param = {
             "target":
-                np.array(
-                    self.__str_to_list(
-                        self.__node.get_parameter('list_target').value)),
+            np.array(
+                self.__str_to_list(
+                    self.__node.get_parameter('list_target').value)),
             "interpolation":
-                self.__node.get_parameter('list_interpolation').value,
+            self.__node.get_parameter('list_interpolation').value,
             "switch_dist":
-                self.__node.get_parameter('list_switch_dist').value,
+            self.__node.get_parameter('list_switch_dist').value,
             "inverse_flag":
-                self.__node.get_parameter('list_inverse_flag').value,
+            self.__node.get_parameter('list_inverse_flag').value,
             "fixed_head":
-                self.__node.get_parameter('list_fixed_head').value,
+            self.__node.get_parameter('list_fixed_head').value,
         }
 
         ### publisher
@@ -142,9 +142,8 @@ class ListGen:
         while rclpy.ok():
             while np.linalg.norm(self.__curr_pose[:2] -
                                  self.__target_list[curr_idx][:2]
-                                ) < self.__list_param["switch_dist"]:
+                                 ) < self.__list_param["switch_dist"]:
                 curr_idx = (curr_idx + 1) % self.__total_num
-            print(curr_idx)
 
             # update target message
             x, y, yaw = self.__target_list[curr_idx]
@@ -158,7 +157,8 @@ class ListGen:
             self.__tar_msg.pose.orientation.z = quat[3]
 
             # publish target message
-            self.__tar_msg.header.stamp = self.__node.get_clock().now().to_msg()
+            self.__tar_msg.header.stamp = self.__node.get_clock().now().to_msg(
+            )
             self.__target_pose_pub.publish(self.__tar_msg)
 
             # loop end process
