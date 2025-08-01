@@ -42,6 +42,7 @@ setup(
             "list_gen = hex_toolkit_general_chasssis.list_gen:main",
             "joy_ctrl = hex_toolkit_general_chasssis.joy_ctrl:main",
             "key_ctrl = hex_toolkit_general_chasssis.key_ctrl:main",
+            "odom_sim = hex_toolkit_general_chasssis.odom_sim:main",
         ],
     },
 )

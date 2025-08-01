@@ -14,11 +14,13 @@ if ROS_VERSION == '1':
     from .ros1_list_gen import ListGen as ListGen
     from .ros1_joy_ctrl import JoyCtrl as JoyCtrl
     from .ros1_key_ctrl import KeyCtrl as KeyCtrl
+    from .ros1_odom_sim import OdomSim as OdomSim
 elif ROS_VERSION == '2':
     from .ros2_circle_gen import CircleGen as CircleGen
     from .ros2_list_gen import ListGen as ListGen
     from .ros2_joy_ctrl import JoyCtrl as JoyCtrl
     from .ros2_key_ctrl import KeyCtrl as KeyCtrl
+    from .ros2_odom_sim import OdomSim as OdomSim
 else:
     raise ValueError("ROS_VERSION is not set")
 
@@ -27,4 +29,5 @@ __all__ = [
     "ListGen",
     "JoyCtrl",
     "KeyCtrl",
+    "OdomSim",
 ]
